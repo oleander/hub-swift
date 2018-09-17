@@ -32,9 +32,9 @@
         "package": "Logger",
         "repositoryURL": "https://github.com/oleander/logger-swift.git",
         "state": {
-          "branch": "master",
-          "revision": "ca0381ec16e20c906f045edef7528f11d14816cc",
-          "version": null
+          "branch": null,
+          "revision": "31bd2029c187a49f637fb66430a02edc907bd61c",
+          "version": "1.0.0"
         }
       },
       {
