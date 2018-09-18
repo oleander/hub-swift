@@ -9,6 +9,7 @@ public class Request {
   public var headers: Headers
   public var cookies: Cookies
   public var body: String?
+  public var files: [String: HTTPFile] = [:]
 
   public init(
     method: HTTPMethod,
@@ -16,6 +17,7 @@ public class Request {
     params: Params = Params(),
     data: [String: Any]? = nil,
     headers: Headers = Headers(),
+    files: [String: HTTPFile] = [:],
     cookies: Cookies = Cookies(),
     body: String? = nil
   ) {
@@ -24,6 +26,7 @@ public class Request {
     self.data = data
     self.params = params
     self.headers = headers
+    self.files = files
     self.body = body
     self.cookies = cookies
   }

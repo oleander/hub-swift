@@ -60,6 +60,7 @@ public class Hub {
     path: String,
     params: Params = Params(),
     data _data: [String: Any]? = nil,
+    files: [String: HTTPFile] = [:],
     json _json: Any? = nil,
     headers: Headers = Headers()
   ) throws -> HTTPData {
@@ -69,6 +70,7 @@ public class Hub {
       data: _data,
       json: _json,
       headers: headers,
+      files: files,
       method: .post
     )
   }
@@ -78,6 +80,7 @@ public class Hub {
     path: String,
     params: Params = Params(),
     data _data: [String: Any]? = nil,
+    files: [String: HTTPFile] = [:],
     json _json: Any? = nil,
     headers: Headers = Headers()
   ) throws -> HTTPData {
@@ -87,6 +90,7 @@ public class Hub {
       data: _data,
       json: _json,
       headers: headers,
+      files: files,
       method: .put
     )
   }
@@ -97,6 +101,7 @@ public class Hub {
     data _data: [String: Any]? = nil,
     json _json: Any? = nil,
     headers: Headers = Headers(),
+    files: [String: HTTPFile] = [:],
     method: HTTPMethod
   ) throws -> HTTPData {
     var json: String?
@@ -120,6 +125,7 @@ public class Hub {
         params: self.params + params,
         data: data,
         headers: headers,
+        files: files,
         body: json
       )
     )
@@ -159,7 +165,7 @@ public class Hub {
       data: data,
       json: nil,
       headers: headers,
-      files: [:],
+      files: request.files,
       auth: nil,
       cookies: cookies,
       allowRedirects: true,
