@@ -138,7 +138,7 @@ public class Hub {
     let data = request.data ?? [:]
     let headers = request.headers
     let method = request.method
-    let cookies = request.cookies + self.cookies
+    let cookies = self.cookies + request.cookies
 
     log.verbose("Body:", body ?? "<EMPTY>")
     log.verbose("URL:", url)
