@@ -12,7 +12,7 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/JustHTTP/Just", from: "0.6.0"),
-    .package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", from: "3.1.4"),
+    .package(url: "https://github.com/IBM-Swift/SwiftyJSON.git", from: "17.0.2"),
     .package(url: "https://github.com/tadija/AEXML.git", from: "4.1.0"),
     .package(url: "https://github.com/tid-kijyun/Kanna.git", from: "4.0.2"),
     .package(url: "https://github.com/oleander/logger-swift.git", from: "1.0.0"),
