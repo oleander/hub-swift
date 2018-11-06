@@ -31,14 +31,25 @@ class HubTests: QuickSpec {
             "key2": "value2"
           ]
 
+          let headers: [String: String] = [
+            "h1": "value1",
+            "h2": "value2",
+            "Content-Type": "application/json"
+          ]
+
           let hub = Hub(
             host: URL(string: "http://localhost:4567")!,
+            headers: headers,
             cookies: cookies
           )
 
           expect {
             try hub.get(path: "/ping.json").json()["cookies"]
           }.to(equal(JSON(cookies)))
+
+          expect {
+            try hub.get(path: "/ping.json").json()["headers"]
+          }.to(equal(JSON(headers)))
         }
       }
 
