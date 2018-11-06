@@ -1,5 +1,6 @@
 import Quick
 import Foundation
+import SwiftyJSON
 import Nimble
 
 @testable import Hub
@@ -25,13 +26,19 @@ class HubTests: QuickSpec {
 
       describe("JSON") {
         it("headers") {
+          let cookies: [String: String] = [
+            "key1": "value1",
+            "key2": "value2"
+          ]
+
           let hub = Hub(
             host: URL(string: "http://localhost:4567")!,
-            cookies: ["key1": "value1"]
+            cookies: cookies
           )
 
-          expect { try hub.get(path: "/ping.json").json()["cookies"]["key1"].string }
-            .to(equal("value1"))
+          expect {
+            try hub.get(path: "/ping.json").json()["cookies"]
+          }.to(equal(JSON(cookies)))
         }
       }
 
