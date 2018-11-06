@@ -2,11 +2,16 @@ import Foundation
 import SwiftyJSON
 
 extension JSON {
+  private func convert(_ key: String) -> JSON {
+    return key
+      .components(separatedBy: ".")
+      .reduce(self) { acc, key in acc[key] }
+  }
+
   public func get<T>(_ key: String, default backup: T? = nil) throws -> T {
-    let json = key.components(separatedBy: ".").reduce(self) { acc, key in acc[key] }
-    guard let value = json.object as? T else {
+    guard let value = convert(key).object as? T else {
       if let that = backup { return that }
-      throw "Could not convert key \(key) to type \(T.self)"
+      else { throw error(for: key) }
     }
 
     return value
@@ -16,19 +21,39 @@ extension JSON {
     return try get(key)
   }
 
+  private func error(for key: String) -> String {
+    return "Could get key '\(key)' in \(rawString() ?? "N/A")"
+  }
+
   public func get(string key: String) throws -> String {
-    return try get(key)
+    guard let value = convert(key).string else {
+      throw error(for: key)
+    }
+
+    return value
   }
 
   public func get(double key: String) throws -> Double {
-    return try get(key)
+    guard let value = convert(key).double else {
+      throw error(for: key)
+    }
+
+    return value
   }
 
   public func get(bool key: String) throws -> Bool {
-    return try get(key)
+    guard let value = convert(key).bool else {
+      throw error(for: key)
+    }
+
+    return value
   }
 
   public func get(int key: String) throws -> Int {
-    return try get(key)
+    guard let value = convert(key).int else {
+      throw error(for: key)
+    }
+
+    return value
   }
 }

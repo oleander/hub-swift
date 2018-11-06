@@ -21,6 +21,19 @@ let session = Hub(
 print(try session.get(path: "/hello").json())
 ```
 
+``` swift
+let html = try Hub.post(
+  url: "http://example.com",
+  params: [
+    "param1": "value1"
+  ],
+  files: [],
+  headers: [],
+  cookies: [],
+  logLevel: .info
+).html()
+```
+
 ## Install
 
 ``` swift

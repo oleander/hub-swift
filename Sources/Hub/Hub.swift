@@ -15,6 +15,63 @@ public class Hub {
   public var delegate: Requestable?
   public typealias CachePolicy = NSURLRequest.CachePolicy
 
+  public static func get(
+    url: String,
+    params: Params = Params(),
+    headers: Headers = Headers(),
+    cookies: Params = Params(),
+    cachePolicy: CachePolicy = .reloadIgnoringLocalCacheData,
+    logLevel: Level = .info
+  ) throws -> HTTPData {
+    guard let host = URL(string: url) else {
+      throw "Could not convert \(url) to url"
+    }
+
+    let hub = Hub(
+      host: host,
+      cookies: cookies,
+      cachePolicy: cachePolicy,
+      logLevel: logLevel
+    )
+
+    return try hub.get(
+      path: "/",
+      params: params,
+      headers: headers
+    )
+  }
+
+  public static func post(
+    url: String,
+    params: Params = Params(),
+    data: [String: Any]? = nil,
+    files: [String: HTTPFile] = [:],
+    json: Any? = nil,
+    headers: Headers = Headers(),
+    cookies: Params = Params(),
+    cachePolicy: CachePolicy = .reloadIgnoringLocalCacheData,
+    logLevel: Level = .info
+  ) throws -> HTTPData {
+    guard let host = URL(string: url) else {
+      throw "Could not convert \(url) to url"
+    }
+
+    let hub = Hub(
+      host: host,
+      cookies: cookies,
+      cachePolicy: cachePolicy,
+      logLevel: logLevel
+    )
+
+    return try hub.post(
+      path: "/",
+      params: params,
+      data: data,
+      json: json,
+      headers: headers
+    )
+  }
+
   public init(
     host: URL,
     params: Params = Params(),
@@ -109,7 +166,11 @@ public class Hub {
 
     switch (_json, _data) {
     case let (.some(data), .none):
-      json = String(describing: JSON(data))
+      guard let maybeJSON = JSON(data).rawString() else {
+        throw "Could not convert JSON to String"
+      }
+
+      json = maybeJSON
     case let (.none, .some(raw)):
       data = raw
     case (.none, .none):
