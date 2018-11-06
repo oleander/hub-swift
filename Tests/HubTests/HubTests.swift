@@ -23,6 +23,18 @@ class HubTests: QuickSpec {
         }
       }
 
+      describe("JSON") {
+        it("headers") {
+          let hub = Hub(
+            host: URL(string: "http://localhost:4567")!,
+            cookies: ["key1": "value1"]
+          )
+
+          expect { try hub.get(path: "/ping.json").json()["cookies"]["key1"].string }
+            .to(equal("value1"))
+        }
+      }
+
       describe("static") {
         it("handles raw string") {
           expect { try Hub.get(url: "http://example.com").raw() }
