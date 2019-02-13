@@ -15,7 +15,7 @@ let package = Package(
     .package(url: "https://github.com/IBM-Swift/SwiftyJSON.git", .branch("swift42")),
     .package(url: "https://github.com/tadija/AEXML.git", from: "4.1.0"),
     .package(url: "https://github.com/tid-kijyun/Kanna.git", from: "4.0.2"),
-    .package(url: "https://github.com/oleander/logger-swift.git", .branch("master")),
+    .package(url: "https://github.com/oleander/logger-swift.git", .revision("6e84c4f")),
     .package(url: "https://github.com/Quick/Nimble.git", from: "7.0.2"),
     .package(url: "https://github.com/Quick/Quick.git", from: "1.2.0")
   ],
