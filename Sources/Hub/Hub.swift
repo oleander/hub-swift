@@ -88,7 +88,7 @@ public class Hub {
     self.host = host
     self.params = params
     self.cookies = cookies
-    self.log = Logger(logLevel)
+    self.log = Logger(logLevel, tags: ["Hub"])
     self.session = JustOf<HTTP>(defaults: defaults)
   }
 
@@ -201,22 +201,36 @@ public class Hub {
     let method = request.method
     let cookies = self.cookies + request.cookies
 
-    log.verbose("Body:", body ?? "<EMPTY>")
-    log.verbose("URL:", url)
-    log.verbose("Method:", method)
+    log.verbose(method, url, tag: "Input") { list in
+      list.kv("Body", body ?? "NONE")
 
-    if !request.params.isEmpty {
-      log.verbose("Params:", request.params)
-    }
+      if request.params.isEmpty {
+        list.kv("Params", "NONE")
+      } else {
+        list.kv("Params", request.params)
+      }
 
-    if !request.params.isEmpty {
-      log.verbose("Headers:", headers)
-    }
+      if headers.isEmpty {
+        list.kv("Headers", "NONE")
+      } else {
+        list.kv("Headers", headers)
+      }
 
-    if let data_ = request.data {
-      log.verbose("Data:", data_)
-    } else if let body_ = request.body {
-      log.verbose("Body:", body_)
+      if cookies.isEmpty {
+        list.kv("Cookies", "NONE")
+      } else {
+        list.kv("Cookies", cookies)
+      }
+
+      if request.files.isEmpty {
+        list.kv("Files", "NONE")
+      } else {
+        list.kv("Files", request.files)
+      }
+
+      list.kv("Retries", retries)
+      list.kv("Timeout", self.timeout)
+      list.kv("Data", data)
     }
 
     let response = session.request(
@@ -237,10 +251,45 @@ public class Hub {
       asyncCompletionHandler: nil
     )
 
-    log.verbose("Response:", response)
-    log.verbose("Body:", response.text ?? "<NONE>")
-    log.verbose("Status:", response.status)
-    log.verbose("Request:", response.desc)
+    let statusStr = String(response.status)
+    let okStatus = response.ok ? statusStr.green : statusStr.red
+
+    log.verbose(okStatus, method, url, tag: "Output") { list in
+      list.kv("Response", response)
+      list.kv("Body", response.text ?? "<NO BODY>")
+      list.kv("Status", response.status)
+      list.kv("Request", response.desc)
+
+      if let json = response.json {
+        list.kv("JSON", json)
+      }
+
+      if let error = response.error {
+        list.kv("Error", error)
+      }
+
+      list.kv("Is redirect", response.isRedirect)
+      list.kv("Reason", response.reason)
+      list.kv("Encoding", response.encoding)
+
+      if response.cookies.isEmpty {
+        list.kv("Cookies", "NONE")
+      } else {
+        list.kv("Cookies", response.cookies)
+      }
+
+      if response.headers.isEmpty {
+        list.kv("Headers", "NONE")
+      } else {
+        list.kv("Headers", response.headers)
+      }
+
+      if response.links.isEmpty {
+        list.kv("Links", "NONE")
+      } else {
+        list.kv("Links", response.links)
+      }
+    }
 
     let httpData = HTTPData(
       request: response
