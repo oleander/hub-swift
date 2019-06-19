@@ -13,10 +13,18 @@ public class HTTPData {
   public typealias HTML = HTMLDocument
   public typealias XML = AEXMLDocument
 
-  private let request: HTTPResult
+  public let request: HTTPResult
 
   public init(request: HTTPResult) {
     self.request = request
+  }
+
+  public var cookies: [String: HTTPCookie] {
+    return request.cookies
+  }
+
+  public var headers: CaseInsensitiveDictionary<String, String> {
+    return request.headers
   }
 
   public var status: Int {
