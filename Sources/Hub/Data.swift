@@ -46,7 +46,7 @@ public class HTTPData {
   }
 
   public func json(throwOnError: Bool = true) throws -> JSON {
-    return JSON(data: try data(throwOnError: throwOnError))
+    return try JSON(data: try data(throwOnError: throwOnError))
   }
 
   public func html() throws -> HTML {
