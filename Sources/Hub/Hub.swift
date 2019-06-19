@@ -260,11 +260,13 @@ public class Hub {
     let statusStr = String(response.status)
     let okStatus = response.ok ? statusStr.green : statusStr.red
 
-    log.verbose(okStatus, method, url, tag: "Output") { list in
+    log.verbose(okStatus, method.rawValue, url, tag: "Output") { list in
       list.kv("Response", response)
       list.kv("Body", response.text ?? "<NO BODY>")
       list.kv("Status", response.status)
       list.kv("Request", response.desc)
+
+      let none = "<NONE>".red
 
       if let json = response.json {
         list.kv("JSON", json)
@@ -279,19 +281,19 @@ public class Hub {
       list.kv("Encoding", response.encoding)
 
       if response.cookies.isEmpty {
-        list.kv("Cookies", "NONE")
+        list.kv("Cookies", none)
       } else {
         list.kv("Cookies", response.cookies)
       }
 
       if response.headers.isEmpty {
-        list.kv("Headers", "NONE")
+        list.kv("Headers", none)
       } else {
         list.kv("Headers", response.headers)
       }
 
       if response.links.isEmpty {
-        list.kv("Links", "NONE")
+        list.kv("Links", none)
       } else {
         list.kv("Links", response.links)
       }
