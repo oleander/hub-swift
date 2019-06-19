@@ -200,37 +200,43 @@ public class Hub {
     let headers = request.headers
     let method = request.method
     let cookies = self.cookies + request.cookies
+    let none = "<NONE>".red
 
-    log.verbose(method, url, tag: "Input") { list in
-      list.kv("Body", body ?? "NONE")
+    log.verbose(method.rawValue, url, tag: "Input") { list in
+      list.kv("Body", request.body ?? none)
 
       if request.params.isEmpty {
-        list.kv("Params", "NONE")
+        list.kv("Params", none)
       } else {
         list.kv("Params", request.params)
       }
 
       if headers.isEmpty {
-        list.kv("Headers", "NONE")
+        list.kv("Headers", none)
       } else {
         list.kv("Headers", headers)
       }
 
       if cookies.isEmpty {
-        list.kv("Cookies", "NONE")
+        list.kv("Cookies", none)
       } else {
         list.kv("Cookies", cookies)
       }
 
       if request.files.isEmpty {
-        list.kv("Files", "NONE")
+        list.kv("Files", none)
       } else {
         list.kv("Files", request.files)
       }
 
       list.kv("Retries", retries)
       list.kv("Timeout", self.timeout)
-      list.kv("Data", data)
+
+      if data.isEmpty {
+        list.kv("Data", none)
+      } else {
+        list.kv("Data", data)
+      }
     }
 
     let response = session.request(
