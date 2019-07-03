@@ -303,6 +303,8 @@ public class Hub {
       request: response
     )
 
+    try delegate?.onDidSend(response: httpData)
+
     if httpData.ok {
       return httpData
     }
@@ -317,8 +319,6 @@ public class Hub {
     guard let status = delegate?.onFailure(response: httpData) else {
       return httpData
     }
-
-    try delegate?.onDidSend(response: httpData)
 
     switch status {
     case .retry where retries < maxRetries:
