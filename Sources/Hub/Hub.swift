@@ -318,6 +318,8 @@ public class Hub {
       return httpData
     }
 
+    try delegate?.onDidSend(response: httpData)
+
     switch status {
     case .retry where retries < maxRetries:
       log.debug("Manual retry: \(retries)")
